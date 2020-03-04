@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+UD_Chinese-GSDSimp-master
+clue_spacy_*.jsonl
+zh_gsdsimp-ud-*.json
+models_*
+cc.zh.300.vec.gz
+.vscode
