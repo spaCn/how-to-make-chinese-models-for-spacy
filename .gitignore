@@ -134,3 +134,4 @@ zh_gsdsimp-ud-*.json
 models_*
 cc.zh.300.vec.gz
 .vscode
+zh_*

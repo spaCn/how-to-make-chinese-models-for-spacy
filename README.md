@@ -2,30 +2,49 @@
 
 ## 0.准备资料下载链接
 
-[FastText]()
+[FastText cc zh 300 vec](https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.zh.300.vec.gz) trained using CBOW with position-weights, in dimension 300, with character n-grams of length 5, a window of size 5 and 10 negatives.
 
-[UD_Chinese-GSDSimp]()
+[UD_Chinese-GSDSimp](https://github.com/UniversalDependencies/UD_Chinese-GSDSimp) UD_Chinese-GSD经过转化修正之后的简体中文版
 
-[CLUENER2020]()
+[CLUENER2020](https://github.com/CLUEbenchmark/CLUENER20200) CLUENER2020数据集，是在清华大学开源的文本分类数据集THUCTC基础上，选出部分数据进行细粒度命名实体标注，原数据来源于Sina News RSS。数据包含10个标签类别，训练集共有10748条语料，验证集共有1343条语料。[谷歌下载地址](https://storage.googleapis.com/cluebenchmark/tasks/cluener_public.zip) [项目里包含](https://github.com/cn-spacy-lm/how-to-make-chinese-models-for-spacy/tree/master/cluener2020)了一份。
 
 ## 词向量（FastText）、词性(UD_Chinese-GSDSimp)、句法依赖(UD_Chinese-GSDSimp)与实体识别(CLUENER2020)
 
-1. init model
-wget https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.zh.300.vec.gz
-spacy init-model fr ./zh_vectors_init --vectors cc.zh.300.vec.gz
+1. convert to spacy
 
-3. convert to spacy
-python -m spacy convert UD_Chinese-GSDSimp-master\zh_gsdsimp-ud-train.conllu ./ -t jsonl
-python -m spacy convert UD_Chinese-GSDSimp-master\zh_gsdsimp-ud-dev.conllu ./ -t jsonl
-python scripts/convert2spacy.py
-python scripts/allin2.py
+    - 用fasttext的vectors初始化一个spacy模型
 
-4. train ner
-python -m spacy train zh ./zh_vectors_web_lg ./spacy_train.jsonl ./spacy_dev.jsonl --base-model ./zh_vectors_init --learn-tokens
+    ```bash
+    spacy init-model zh ./zh_vectors_init --vectors cc.zh.300.vec.gz
+    ```
+
+    - 转换ud库格式
+
+    ```bash
+    python -m spacy convert UD_Chinese-GSDSimp-master\zh_gsdsimp-ud-train.conllu ./ -t jsonl
+
+    python -m spacy convert UD_Chinese-GSDSimp-master\zh_gsdsimp-ud-dev.conllu ./ -t jsonl
+    ```
+
+    - 转换clue ner标注数据格式
+
+    ```bash
+    python scripts/convert2spacy.py
+    ```
+
+2. train
+
+    ```bash
+    python -m spacy train zh ./zh_vectors_web_ud_lg zh_gsdsimp-ud-train.json zh_gsdsimp-ud-dev.json --base-model ./zh_vectors_init
+
+    python -m spacy train zh ./zh_vectors_web_lg ./spacy_train.jsonl ./spacy_dev.jsonl --base-model ./zh_vectors_init --learn-tokens
+
+    python scripts/train_ner.py
+    ```
+
 
 ## 注意事项
 
 ## 演示
 
-## License
-CC BY-SA 4.0
+License: CC BY-SA 4.0

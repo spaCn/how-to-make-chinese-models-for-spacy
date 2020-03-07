@@ -20,7 +20,7 @@ def diff_contain_overlapping(entities):
     return True
 
 
-def format_data_to_jsonl(data, file_path):
+def format_data_to_jsonl(data, file_path, print_label=False):
     result = []
     labels = set()
     i = 0
@@ -51,6 +51,8 @@ def format_data_to_jsonl(data, file_path):
                 f.write(json_dumps(line) + "\n")
     
     msg.good(f"Finished {file_path} :: {i} rows")
+    if print_label:
+        msg.info(f"{labels}")
 
 
 if __name__ == "__main__":
@@ -62,4 +64,4 @@ if __name__ == "__main__":
     train_data = read_jsonl(Path("./cluener2020/train.json"))
 
     format_data_to_jsonl(dev_data, Path("./clue_spacy_dev.jsonl"))
-    format_data_to_jsonl(train_data, Path("./clue_spacy_train.jsonl"))
+    format_data_to_jsonl(train_data, Path("./clue_spacy_train.jsonl"), print_label=True)
