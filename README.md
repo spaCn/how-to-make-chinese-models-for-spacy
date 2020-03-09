@@ -40,9 +40,17 @@
     python scripts/train_ner.py
     ```
 
-
 ## 注意事项
 
+- Windows用户要注意spacy 2.2.3版本训练的时候想用GPU的话要把thinc升级到7.4.0
+
+```bash
+pip install -U thinc
+```
+
 ## 演示
+
+![dep](/img/dep.png)
+![ner](/img/ner.jpg)
 
 License: CC BY-SA 4.0
