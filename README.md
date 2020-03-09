@@ -37,8 +37,6 @@
     ```bash
     python -m spacy train zh ./zh_vectors_web_ud_lg zh_gsdsimp-ud-train.json zh_gsdsimp-ud-dev.json --base-model ./zh_vectors_init
 
-    python -m spacy train zh ./zh_vectors_web_lg ./spacy_train.jsonl ./spacy_dev.jsonl --base-model ./zh_vectors_init --learn-tokens
-
     python scripts/train_ner.py
     ```
 
