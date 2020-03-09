@@ -115,25 +115,21 @@ def main(
 
     meta = srsly.read_json(meta_path) if meta_path else {}
 
-    # train_path="../clue_spacy_train.jsonl",
-    # dev_path="../clue_spacy_dev.json",
     # Prepare training corpus
     msg.text("Counting training words (limit={})".format(0))
     corpus = GoldCorpus(train_path, dev_path, limit=0)
     n_train_words = corpus.count_train()
-
-    
     
     if model is None:   
         optimizer = nlp.begin_training(lambda: corpus.train_tuples, device=use_gpu)
     else:
         optimizer = create_default_optimizer(Model.ops)
+        # Todo: gpu train?
 
     dropout_rates = decaying( 0.2, 0.2, 0.0)
     
     batch_sizes = compounding( 100.0, 1000.0 , 1.001)
 
-    # move_names = list(ner.move_names)
     # get names of other pipes to disable them during training
     pipe_exceptions = ["ner", "trf_wordpiecer", "trf_tok2vec"]
     other_pipes = [
@@ -284,9 +280,11 @@ def main(
     finally:
         with nlp.use_params(optimizer.averages):
             final_model_path = output_dir / "model-final"
-            nlp.add_pipe("parser,tagger")
             nlp.to_disk(final_model_path)
         msg.good("Saved model to output directory", final_model_path)
+        meta["pipeline"] = nlp.pipe_names
+        meta["labels"] = nlp.meta["labels"]
+        meta["factories"] = nlp.meta["factories"]
         with msg.loading("Creating best model..."):
             best_model_path = _collate_best_model(meta, output_dir, nlp.pipe_names)
         msg.good("Created best model", best_model_path)
@@ -326,14 +324,19 @@ def _collate_best_model(meta, output_path, components):
     best_dest = output_path / "model-best"
     shutil.copytree(path2str(output_path / "model-final"), path2str(best_dest))
     for component, best_component_src in bests.items():
+        shutil.rmtree(path2str(best_dest / component))
         if component == "ner":
-            shutil.rmtree(path2str(best_dest / component))
             shutil.copytree(
                 path2str(best_component_src / component), path2str(best_dest / component)
             )
             accs = srsly.read_json(best_component_src / "accuracy.json")
             for metric in _get_metrics(component):
                 meta["accuracy"][metric] = accs[metric]
+        else:
+            best_component_src = output_path / "model-final"
+            shutil.copytree(
+                path2str(best_component_src / component), path2str(best_dest / component)
+            )
     srsly.write_json(best_dest / "meta.json", meta)
     return best_dest
 
