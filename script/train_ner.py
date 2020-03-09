@@ -72,7 +72,7 @@ def main(
     dev_path="./clue_spacy_dev.jsonl",
     meta_path="./meta.json",
     use_gpu=0,
-    n_iter=2
+    n_iter=50
 ):
     import tqdm
     """Set up the pipeline and entity recognizer, and train the new entity."""
