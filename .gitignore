@@ -135,3 +135,6 @@ models_*
 cc.zh.300.vec.gz
 .vscode
 zh_*
+spacy_trf_*
+models/bert-base-uncased-pytorch_model.bin
+download_cache
