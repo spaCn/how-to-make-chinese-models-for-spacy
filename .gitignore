@@ -138,3 +138,4 @@ zh_*
 spacy_trf_*
 models/bert-base-uncased-pytorch_model.bin
 download_cache
+trf_models/*

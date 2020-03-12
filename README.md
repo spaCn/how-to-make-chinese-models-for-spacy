@@ -52,6 +52,43 @@
     pip install -U thinc
     ```
 
+## transformers models download url
+
+因为一些*年轻人*可能不知道的原因，预训练模型有的时候下载不下来，所以推荐用可以断点续传的工具下载。
+
+[bert-base-chinese config](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-config.json) [bert-base-chinese model bin](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-pytorch_model.bin) [bert-base-chinese vocab](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-vocab.txt)
+
+想获取其他模型下载地址的话可以用
+```bash
+python ./script/gen_transformers_models_url.py bert-base-chinese -mk
+
+⚠ ./trf_models/bert-base-chinese already exists
+⚠  ================url================
+https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-config.json
+https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-pytorch_model.bin
+https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-vocab.txt
+⚠  ================url================
+✔  使用下载工具下载后，将模型文件放入缓存文件夹中。
+```
+
+## 使用spacy-transformers init Chinese model
+
+将下载的模型文件名整体去掉`bert-base-chinese-`
+
+```python
+class TransformersWordPiecerCn(TransformersWordPiecer):
+    @classmethod
+    def from_pretrained(cls, vocab, trf_name, **cfg):
+        tokenizer = get_tokenizer(trf_name)
+        tokenizer.pretrained_vocab_files_map["vocab_file"][trf_name] = "./trf_models/bert-base-chinese/vocab.txt"
+        model = tokenizer.from_pretrained(trf_name)
+        return cls(vocab, model=model, trf_name=trf_name, **cfg)
+```
+
+```bash
+python ./spacy-transformers/init_model.py
+```
+
 ## 演示
 
 ![dep](/img/dep.png)
@@ -61,6 +98,6 @@
 
 - [x] 添加腾讯AI Lab Embedding地址
 - [ ] msra语料与onto 5语料训练
-- [ ] spacy-transformers zh模型
+- [x] spacy-transformers zh模型
 
 License: CC BY-SA 4.0
