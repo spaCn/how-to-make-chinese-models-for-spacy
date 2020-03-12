@@ -75,18 +75,19 @@ https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-vocab.txt
 
 将下载的模型文件名整体去掉`bert-base-chinese-`
 
-```python
-class TransformersWordPiecerCn(TransformersWordPiecer):
-    @classmethod
-    def from_pretrained(cls, vocab, trf_name, **cfg):
-        tokenizer = get_tokenizer(trf_name)
-        tokenizer.pretrained_vocab_files_map["vocab_file"][trf_name] = "./trf_models/bert-base-chinese/vocab.txt"
-        model = tokenizer.from_pretrained(trf_name)
-        return cls(vocab, model=model, trf_name=trf_name, **cfg)
+```bash
+python ./spacy-transformers/init_model.py
+
+ℹ Creating model for 'bert-base-chinese' (zh)
+✔ Initialized the model pipeline
+✔ Saved 'bert-base-chinese' (zh)
+Pipeline: ['sentencizer', 'trf_wordpiecer', 'trf_tok2vec']
+Location: ./spacy_trf_zh
+✔ Model loads!
 ```
 
 ```bash
-python ./spacy-transformers/init_model.py
+python -m spacy train zh ./zh_bert_ud zh_gsdsimp-ud-train.json zh_gsdsimp-ud-dev.json --base-model ./spacy_trf_zh
 ```
 
 ## 演示

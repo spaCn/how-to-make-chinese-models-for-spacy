@@ -12,14 +12,6 @@ from spacy_transformers.util import get_tokenizer, get_model, get_config
 from spacy_transformers.wrapper import TransformersWrapper
 from spacy_transformers.model_registry import get_model_function
 
-class TransformersWordPiecerCn(TransformersWordPiecer):
-    @classmethod
-    def from_pretrained(cls, vocab, trf_name, **cfg):
-        tokenizer = get_tokenizer(trf_name)
-        tokenizer.pretrained_vocab_files_map["vocab_file"][trf_name] = "./trf_models/bert-base-chinese/vocab.txt"
-        model = tokenizer.from_pretrained(trf_name)
-        return cls(vocab, model=model, trf_name=trf_name, **cfg)
-
 # is_using_gpu = spacy.prefer_gpu()
 # if is_using_gpu:
 #     print("Using GPU!")
@@ -39,7 +31,7 @@ def main(path="./spacy_trf_zh", name="bert-base-chinese", lang="zh"):
     with msg.loading(f"Setting up the pipeline..."):
         nlp = TransformersLanguage(trf_name=name, meta={"lang": lang})
         nlp.add_pipe(nlp.create_pipe("sentencizer"))
-        nlp.add_pipe(TransformersWordPiecerCn.from_pretrained(nlp.vocab, name))
+        nlp.add_pipe(TransformersWordPiecer.from_pretrained(nlp.vocab, "./trf_models/bert-base-chinese"))
         nlp.add_pipe(TransformersTok2Vec.from_pretrained(nlp.vocab, "./trf_models/bert-base-chinese"))
     msg.good("Initialized the model pipeline")
     nlp.to_disk(path)
