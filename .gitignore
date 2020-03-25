@@ -128,7 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-UD_Chinese-GSDSimp-master
+.vs
+
+UD_*
 clue_spacy_*.jsonl
 zh_gsdsimp-ud-*.json
 models_*
@@ -139,3 +141,4 @@ spacy_trf_*
 models/bert-base-uncased-pytorch_model.bin
 download_cache
 trf_models/*
+test_trf*

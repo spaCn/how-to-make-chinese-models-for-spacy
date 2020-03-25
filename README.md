@@ -60,7 +60,7 @@
 
 想获取其他模型下载地址的话可以用
 ```bash
-python ./script/gen_transformers_models_url.py bert-base-chinese -mk
+python ./script/get_transformers_models_url.py bert-base-chinese -mk -local
 
 ⚠ ./trf_models/bert-base-chinese already exists
 ⚠  ================url================
@@ -69,6 +69,10 @@ https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-pytorch_mo
 https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-vocab.txt
 ⚠  ================url================
 ✔  使用下载工具下载后，将模型文件放入缓存文件夹中。
+```
+
+```bash
+ValueError: 本地Class中未找到 't5-3b'的配置，请去掉-local试一下。
 ```
 
 ## 使用spacy-transformers init Chinese model
