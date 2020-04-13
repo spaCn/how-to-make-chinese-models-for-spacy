@@ -30,6 +30,7 @@ def main(path="./spacy_trf_zh", name="bert-base-chinese", lang="zh"):
     msg.info(f"Creating model for '{name}' ({lang})")
     with msg.loading(f"Setting up the pipeline..."):
         nlp = TransformersLanguage(trf_name=name, meta={"lang": lang})
+
         nlp.add_pipe(nlp.create_pipe("sentencizer"))
         nlp.add_pipe(TransformersWordPiecer.from_pretrained(nlp.vocab, "./trf_models/bert-base-chinese"))
         nlp.add_pipe(TransformersTok2Vec.from_pretrained(nlp.vocab, "./trf_models/bert-base-chinese"))

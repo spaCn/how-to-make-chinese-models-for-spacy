@@ -142,3 +142,4 @@ models/bert-base-uncased-pytorch_model.bin
 download_cache
 trf_models/*
 test_trf*
+thinc_models/*

@@ -58,7 +58,7 @@
 
 [bert-base-chinese config](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-config.json) [bert-base-chinese model bin](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-pytorch_model.bin) [bert-base-chinese vocab](https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-chinese-vocab.txt)
 
-想获取其他模型下载地址的话可以用
+想不翻墙仅获取pytorch模型下载地址的话可以用，全都要的请点击链接[https://huggingface.co/models](https://huggingface.co/models)
 ```bash
 python ./script/get_transformers_models_url.py bert-base-chinese -mk -local
 
